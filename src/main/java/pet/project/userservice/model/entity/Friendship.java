@@ -33,10 +33,10 @@ public class Friendship {
     private long id;
 
     @NotNull(message = "user_id can't be null")
-    private long userId;
+    private Long userId;
 
     @NotNull(message = "friend_id can't be null")
-    private long friendId;
+    private Long friendId;
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "friendshipStatus can't be null")
