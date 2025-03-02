@@ -1,11 +1,14 @@
 package pet.project.userservice.model.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
@@ -32,16 +35,16 @@ public class Friendship {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotNull(message = "user_id can't be null")
-    private Long userId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @NotNull(message = "friend_id can't be null")
-    private Long friendId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "friend_id")
+    private User friend;
 
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "friendshipStatus can't be null")
     private FriendshipStatus friendshipStatus;
 
-    @NotNull(message = "createdAt can't be null")
     private Instant createdAt;
 }
