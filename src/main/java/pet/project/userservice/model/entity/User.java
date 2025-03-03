@@ -34,21 +34,24 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Size(min = 60, max = 60)
-    private String passwordHash;
+    @Column(name = "password_hash", nullable = false)
+    private String password;
 
+    @Column(nullable = false)
     private String name;
 
     private String bio;
 
     private String avatar;
 
+    @Column(nullable = false)
     private Instant createdAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

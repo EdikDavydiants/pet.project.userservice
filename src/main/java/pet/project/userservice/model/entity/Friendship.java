@@ -1,6 +1,7 @@
 package pet.project.userservice.model.entity;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -37,14 +38,18 @@ public class Friendship {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
+    @Column(nullable = false)
     private User user;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "friend_id")
+    @Column(nullable = false)
     private User friend;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private FriendshipStatus friendshipStatus;
 
+    @Column(nullable = false)
     private Instant createdAt;
 }
