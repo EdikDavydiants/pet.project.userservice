@@ -28,7 +28,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "friendship",
+@Table(name = "friendships",
         uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "friend_id"}))
 public class Friendship {
 
@@ -37,13 +37,11 @@ public class Friendship {
     private long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "friend_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "friend_id", nullable = false)
     private User friend;
 
     @Enumerated(EnumType.STRING)
