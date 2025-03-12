@@ -9,6 +9,8 @@ import pet.project.userservice.repository.UserRepository;
 
 import java.time.Instant;
 
+import static pet.project.userservice.constant.ErrorMessagesUtil.USER_ALREADY_EXIST;
+
 @Service
 public class RegistrationService {
 
@@ -30,7 +32,7 @@ public class RegistrationService {
                 .build();
 
         if (userRepository.existsByUsername(request.username())) {
-            throw new UserAlreadyExistsException("Such username already exists!");
+            throw new UserAlreadyExistsException(USER_ALREADY_EXIST);
         }
 
         var savedUser = userRepository.save(newUser);
