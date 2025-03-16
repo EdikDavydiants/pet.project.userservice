@@ -4,12 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import pet.project.userservice.exception.UnknownException;
-import pet.project.userservice.exception.UserAlreadyExistsException;
-import pet.project.userservice.exception.UserNotFoundException;
+import pet.project.userservice.exception.*;
 import pet.project.userservice.model.dto.GeneralErrorResponse;
 
-import static pet.project.userservice.constant.ErrorMessagesUtil.USER_NOT_FOUND_DETAILS;
+import static pet.project.userservice.constant.ErrorMessagesUtil.*;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -56,6 +54,28 @@ public class GlobalExceptionHandler {
                         .type("UserNotFoundError")
                         .message(exception.getMessage())
                         .details(USER_NOT_FOUND_DETAILS)
+                        .build());
+    }
+
+    @ExceptionHandler(WrongTokenType.class)
+    public ResponseEntity<GeneralErrorResponse> handleWrongTokenTypeException(WrongTokenType exception) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(GeneralErrorResponse.builder()
+                        .status(HttpStatus.UNAUTHORIZED.value())
+                        .type("WrongTokenTypeError")
+                        .message(exception.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler(AuthHeaderIsMissing.class)
+    public ResponseEntity<GeneralErrorResponse> handleAuthHeaderIsMissingException(AuthHeaderIsMissing exception) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(GeneralErrorResponse.builder()
+                        .status(HttpStatus.UNAUTHORIZED.value())
+                        .type("AuthHeaderIsMissingError")
+                        .message(exception.getMessage())
                         .build());
     }
 }
