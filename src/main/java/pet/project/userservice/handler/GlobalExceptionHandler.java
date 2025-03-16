@@ -78,4 +78,26 @@ public class GlobalExceptionHandler {
                         .message(exception.getMessage())
                         .build());
     }
+
+    @ExceptionHandler(ForbiddenAccessException.class)
+    public ResponseEntity<GeneralErrorResponse> handleForbiddenAccessException(ForbiddenAccessException exception) {
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(GeneralErrorResponse.builder()
+                        .status(HttpStatus.FORBIDDEN.value())
+                        .type("ForbiddenAccessError")
+                        .message(exception.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler(AllParamsAreNullException.class)
+    public ResponseEntity<GeneralErrorResponse> handleAllParamsAreNullException(AllParamsAreNullException exception) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(GeneralErrorResponse.builder()
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .type("AllParamsAreNullError")
+                        .message(exception.getMessage())
+                        .build());
+    }
 }

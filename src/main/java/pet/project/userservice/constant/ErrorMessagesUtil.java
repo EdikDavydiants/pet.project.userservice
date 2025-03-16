@@ -7,4 +7,6 @@ public class ErrorMessagesUtil {
     public static final String USER_NOT_FOUND_DETAILS = "Username has been entered is not correct.";
     public static final String WRONG_TOKEN_TYPE = "Type of the token is not Bearer!";
     public static final String AUTH_HEADER_IS_MISSING = "Authorization header is missing!";
+    public static final String FORBIDDEN_TO_UPDATE = "Not allowed to update user profile!";
+    public static final String ALL_PARAMS_ARE_NULL = "At least one parameter must be not null!";
 }

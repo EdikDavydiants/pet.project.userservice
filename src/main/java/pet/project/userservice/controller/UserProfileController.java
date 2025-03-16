@@ -1,10 +1,9 @@
 package pet.project.userservice.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pet.project.userservice.model.dto.request.UserProfileUpdateDtoRequest;
 import pet.project.userservice.model.dto.response.UserProfileDtoResponse;
 import pet.project.userservice.service.UserProfileService;
 import pet.project.userservice.utils.JwtUtils;
@@ -21,5 +20,14 @@ public class UserProfileController {
 
         String jwt = JwtUtils.extractTokenFromHeader(authHeader);
         return userProfileService.getUserProfile(jwt, id);
+    }
+
+    @PutMapping("/{id}")
+    public void updateUserProfile(
+            @RequestHeader(value = "Authorization") String authHeader, @PathVariable long id,
+            @Valid @RequestBody UserProfileUpdateDtoRequest request) {
+
+        String jwt = JwtUtils.extractTokenFromHeader(authHeader);
+        userProfileService.updateUserProfile(jwt, id, request);
     }
 }
