@@ -5,8 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import pet.project.userservice.model.dto.request.UserProfileUpdateDtoRequest;
 import pet.project.userservice.model.dto.response.UserProfileDtoResponse;
+import pet.project.userservice.model.dto.response.UserShortProfileDtoResponse;
 import pet.project.userservice.service.UserProfileService;
 import pet.project.userservice.utils.JwtUtils;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,5 +32,11 @@ public class UserProfileController {
 
         String jwt = JwtUtils.extractTokenFromHeader(authHeader);
         userProfileService.updateUserProfile(jwt, id, request);
+    }
+
+    @GetMapping
+    public List<UserShortProfileDtoResponse> searchUserProfiles(@RequestParam String query) {
+
+        return userProfileService.searchUserProfiles(query);
     }
 }

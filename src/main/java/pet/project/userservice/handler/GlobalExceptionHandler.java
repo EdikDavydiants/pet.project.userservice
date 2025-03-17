@@ -2,6 +2,7 @@ package pet.project.userservice.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import pet.project.userservice.exception.*;
@@ -98,6 +99,19 @@ public class GlobalExceptionHandler {
                         .status(HttpStatus.BAD_REQUEST.value())
                         .type("AllParamsAreNullError")
                         .message(exception.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<GeneralErrorResponse> handleMissingServletRequestParameterException(
+            MissingServletRequestParameterException exception) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(GeneralErrorResponse.builder()
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .type("MissingServletRequestParameterError")
+                        .message(exception.getMessage())
+                        .details("Some parameters in the uri have been missed!")
                         .build());
     }
 }

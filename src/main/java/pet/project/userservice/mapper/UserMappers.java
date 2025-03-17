@@ -1,7 +1,11 @@
 package pet.project.userservice.mapper;
 
 import pet.project.userservice.model.dto.response.UserProfileDtoResponse;
+import pet.project.userservice.model.dto.response.UserShortProfileDtoResponse;
 import pet.project.userservice.model.entity.User;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserMappers {
 
@@ -26,5 +30,17 @@ public class UserMappers {
                 .avatar(user.getAvatar())
                 .bio(user.getBio())
                 .build();
+    }
+
+    public static List<UserShortProfileDtoResponse> mapUsersToShortProfiles(List<User> users) {
+
+        return users.stream()
+                .map(user -> UserShortProfileDtoResponse.builder()
+                        .id(user.getId())
+                        .name(user.getName())
+                        .bio(user.getBio())
+                        .avatar(user.getAvatar())
+                        .build())
+                .toList();
     }
 }

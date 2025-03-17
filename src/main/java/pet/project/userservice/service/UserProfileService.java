@@ -5,15 +5,18 @@ import org.springframework.stereotype.Service;
 import pet.project.userservice.exception.AllParamsAreNullException;
 import pet.project.userservice.exception.ForbiddenAccessException;
 import pet.project.userservice.exception.UserNotFoundException;
+import pet.project.userservice.mapper.UserMappers;
 import pet.project.userservice.model.dto.request.UserProfileUpdateDtoRequest;
 import pet.project.userservice.model.dto.response.UserProfileDtoResponse;
+import pet.project.userservice.model.dto.response.UserShortProfileDtoResponse;
 import pet.project.userservice.model.entity.User;
 import pet.project.userservice.repository.UserRepository;
 import pet.project.userservice.utils.JwtUtils;
 
+import java.util.List;
+
 import static pet.project.userservice.constant.ErrorMessagesUtil.*;
-import static pet.project.userservice.mapper.UserMappers.mapUserToFullUserProfileDto;
-import static pet.project.userservice.mapper.UserMappers.mapUserToUserProfileDto;
+import static pet.project.userservice.mapper.UserMappers.*;
 
 @Service
 @RequiredArgsConstructor
@@ -61,5 +64,11 @@ public class UserProfileService {
         }
 
         userRepository.save(user);
+    }
+
+    public List<UserShortProfileDtoResponse> searchUserProfiles(String query) {
+
+        List<User> users = userRepository.findTop15ByNameContainingIgnoreCase(query);
+        return mapUsersToShortProfiles(users);
     }
 }
