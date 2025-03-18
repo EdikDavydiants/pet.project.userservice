@@ -35,6 +35,17 @@ public class GlobalExceptionHandler {
                         .build());
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<GeneralErrorResponse> handleBadRequestException(BadRequestException exception) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(GeneralErrorResponse.builder()
+                        .status(HttpStatus.BAD_REQUEST.value())
+                        .type("BadRequestError")
+                        .message(exception.getMessage())
+                        .build());
+    }
+
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<GeneralErrorResponse> handleUserAlreadyExistsException(UserAlreadyExistsException exception) {
         return ResponseEntity

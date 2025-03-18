@@ -9,4 +9,6 @@ public class ErrorMessagesUtil {
     public static final String AUTH_HEADER_IS_MISSING = "Authorization header is missing!";
     public static final String FORBIDDEN_TO_UPDATE = "Not allowed to update user profile!";
     public static final String ALL_PARAMS_ARE_NULL = "At least one parameter must be not null!";
+    public static final String FORBIDDEN_REQUEST = "Forbidden request!";
+    public static final String FRIEND_ID_MATCH_USER_ID = "Friend id can't match user id!";
 }
