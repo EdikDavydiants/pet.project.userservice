@@ -7,7 +7,8 @@ import pet.project.userservice.model.dto.response.AuthenticationDtoResponse;
 import pet.project.userservice.model.entity.User;
 import pet.project.userservice.repository.UserRepository;
 
-import static pet.project.userservice.constant.ErrorMessagesUtil.USER_NOT_FOUND;
+import static pet.project.userservice.constant.ErrorMessagesUtil.USER_NOT_FOUND_BY_ID;
+import static pet.project.userservice.constant.ErrorMessagesUtil.USER_NOT_FOUND_BY_USERNAME;
 
 @Service
 public class AuthenticationService {
@@ -20,7 +21,7 @@ public class AuthenticationService {
 
     public AuthenticationDtoResponse getPasswordHash(AuthenticationDtoRequest request) {
         User user = userRepository.findUserByUsername(request.username())
-                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_BY_USERNAME));
 
         return AuthenticationDtoResponse.builder()
                 .id(user.getId())

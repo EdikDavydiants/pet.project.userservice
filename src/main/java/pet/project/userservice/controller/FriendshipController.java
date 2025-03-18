@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import pet.project.userservice.exception.ForbiddenAccessException;
+import pet.project.userservice.model.dto.SimpleDtoResponse;
 import pet.project.userservice.model.dto.response.FriendshipRequestDtoResponse;
 import pet.project.userservice.service.FriendshipService;
 
@@ -20,7 +21,7 @@ public class FriendshipController {
     private final FriendshipService friendshipService;
 
     @PostMapping("/{id}/friends/{friendId}")
-    public FriendshipRequestDtoResponse sendFriendshipRequest(
+    public SimpleDtoResponse sendFriendshipRequest(
             @RequestHeader(value = "Authorization") String authHeader,
             @PathVariable long id, @PathVariable long friendId) {
 
@@ -32,5 +33,20 @@ public class FriendshipController {
         }
 
         return friendshipService.sendFriendshipRequest(id, friendId);
+    }
+
+    @PostMapping("/{id}/friends/{friendId}/accept")
+    public SimpleDtoResponse acceptFriendship(
+            @RequestHeader(value = "Authorization") String authHeader,
+            @PathVariable long id, @PathVariable long friendId) {
+
+        String jwt = extractTokenFromHeader(authHeader);
+        long headerId = extractIdFromJwt(jwt);
+
+        if(headerId != id) {
+            throw new ForbiddenAccessException(FORBIDDEN_REQUEST);
+        }
+
+        return friendshipService.acceptFriendshipRequest(id, friendId);
     }
 }

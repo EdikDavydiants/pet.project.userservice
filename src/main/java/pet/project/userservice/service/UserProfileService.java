@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import pet.project.userservice.exception.AllParamsAreNullException;
 import pet.project.userservice.exception.ForbiddenAccessException;
 import pet.project.userservice.exception.UserNotFoundException;
-import pet.project.userservice.mapper.UserMappers;
 import pet.project.userservice.model.dto.request.UserProfileUpdateDtoRequest;
 import pet.project.userservice.model.dto.response.UserProfileDtoResponse;
 import pet.project.userservice.model.dto.response.UserShortProfileDtoResponse;
@@ -29,7 +28,7 @@ public class UserProfileService {
         long idFromHeader = JwtUtils.extractIdFromJwt(jwt);
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_BY_ID));
 
         if (idFromHeader == id) {
             return mapUserToFullUserProfileDto(user);
@@ -51,7 +50,7 @@ public class UserProfileService {
         }
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_BY_ID));
 
         if (request.name() != null) {
             user.setName(request.name());
