@@ -1,13 +1,13 @@
 package pet.project.userservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import pet.project.userservice.exception.ForbiddenAccessException;
 import pet.project.userservice.model.dto.SimpleDtoResponse;
-import pet.project.userservice.model.dto.response.FriendshipRequestDtoResponse;
 import pet.project.userservice.service.FriendshipService;
 
 import static pet.project.userservice.constant.ErrorMessagesUtil.FORBIDDEN_REQUEST;
@@ -25,13 +25,7 @@ public class FriendshipController {
             @RequestHeader(value = "Authorization") String authHeader,
             @PathVariable long id, @PathVariable long friendId) {
 
-        String jwt = extractTokenFromHeader(authHeader);
-        long headerId = extractIdFromJwt(jwt);
-
-        if(headerId != id) {
-            throw new ForbiddenAccessException(FORBIDDEN_REQUEST);
-        }
-
+        checkPermission(authHeader, id);
         return friendshipService.sendFriendshipRequest(id, friendId);
     }
 
@@ -40,13 +34,25 @@ public class FriendshipController {
             @RequestHeader(value = "Authorization") String authHeader,
             @PathVariable long id, @PathVariable long friendId) {
 
+        checkPermission(authHeader, id);
+        return friendshipService.acceptFriendshipRequest(id, friendId);
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public SimpleDtoResponse deleteFriendship(
+            @RequestHeader(value = "Authorization") String authHeader,
+            @PathVariable long id, @PathVariable long friendId) {
+
+        checkPermission(authHeader, id);
+        return friendshipService.deleteFriendship(id, friendId);
+    }
+
+    public void checkPermission(String authHeader, long id) {
+
         String jwt = extractTokenFromHeader(authHeader);
         long headerId = extractIdFromJwt(jwt);
-
         if(headerId != id) {
             throw new ForbiddenAccessException(FORBIDDEN_REQUEST);
         }
-
-        return friendshipService.acceptFriendshipRequest(id, friendId);
     }
 }

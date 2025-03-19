@@ -14,6 +14,7 @@ import pet.project.userservice.repository.UserRepository;
 import java.time.Instant;
 
 import static pet.project.userservice.constant.ErrorMessagesUtil.*;
+import static pet.project.userservice.constant.SimpleMessagesUtil.FRIENDSHIP_DELETED;
 import static pet.project.userservice.enums.FriendshipStatus.ACCEPTED;
 import static pet.project.userservice.enums.FriendshipStatus.PENDING;
 
@@ -50,6 +51,21 @@ public class FriendshipService {
 
     public SimpleDtoResponse acceptFriendshipRequest(long id, long friendId) {
 
+        Friendship friendship = findFriendship(id, friendId);
+        friendship.setFriendshipStatus(ACCEPTED);
+        friendshipRepository.save(friendship);
+        return new SimpleDtoResponse(ACCEPTED.toString());
+    }
+
+    public SimpleDtoResponse deleteFriendship(long id, long friendId) {
+
+        Friendship friendship = findFriendship(id, friendId);
+        friendshipRepository.delete(friendship);
+        return new SimpleDtoResponse(FRIENDSHIP_DELETED);
+    }
+
+    public Friendship findFriendship(long id, long friendId) {
+
         if (id == friendId) {
             throw new BadRequestException(FRIEND_ID_MATCH_USER_ID);
         }
@@ -60,11 +76,7 @@ public class FriendshipService {
         User friend = userRepository.findById(friendId)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_BY_ID));
 
-        Friendship friendship = friendshipRepository.findFriendshipByUserAndFriend(friend, user)
+        return friendshipRepository.findFriendshipByUserAndFriend(friend, user)
                 .orElseThrow(() -> new FriendshipNotFoundException(FRIENDSHIP_NOT_FOUND));
-
-        friendship.setFriendshipStatus(ACCEPTED);
-        friendshipRepository.save(friendship);
-        return new SimpleDtoResponse(ACCEPTED.toString());
     }
 }
