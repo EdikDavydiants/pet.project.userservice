@@ -2,12 +2,14 @@ package pet.project.userservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import pet.project.userservice.exception.ForbiddenAccessException;
 import pet.project.userservice.model.dto.SimpleDtoResponse;
+import pet.project.userservice.model.dto.response.FriendListDtoResponse;
 import pet.project.userservice.service.FriendshipService;
 
 import static pet.project.userservice.constant.ErrorMessagesUtil.FORBIDDEN_REQUEST;
@@ -45,6 +47,12 @@ public class FriendshipController {
 
         checkPermission(authHeader, id);
         return friendshipService.deleteFriendship(id, friendId);
+    }
+
+    @GetMapping("/{id}/friends")
+    public FriendListDtoResponse getFriends(@PathVariable long id) {
+
+        return friendshipService.getFriends(id);
     }
 
     public void checkPermission(String authHeader, long id) {

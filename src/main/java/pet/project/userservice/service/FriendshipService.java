@@ -6,17 +6,23 @@ import pet.project.userservice.exception.BadRequestException;
 import pet.project.userservice.exception.FriendshipNotFoundException;
 import pet.project.userservice.exception.UserNotFoundException;
 import pet.project.userservice.model.dto.SimpleDtoResponse;
+import pet.project.userservice.model.dto.response.FriendListDtoResponse;
 import pet.project.userservice.model.entity.Friendship;
 import pet.project.userservice.model.entity.User;
 import pet.project.userservice.repository.FriendshipRepository;
 import pet.project.userservice.repository.UserRepository;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Stream;
 
-import static pet.project.userservice.constant.ErrorMessagesUtil.*;
+import static pet.project.userservice.constant.ErrorMessagesUtil.FRIENDSHIP_NOT_FOUND;
+import static pet.project.userservice.constant.ErrorMessagesUtil.FRIEND_ID_MATCH_USER_ID;
+import static pet.project.userservice.constant.ErrorMessagesUtil.USER_NOT_FOUND_BY_ID;
 import static pet.project.userservice.constant.SimpleMessagesUtil.FRIENDSHIP_DELETED;
 import static pet.project.userservice.enums.FriendshipStatus.ACCEPTED;
 import static pet.project.userservice.enums.FriendshipStatus.PENDING;
+import static pet.project.userservice.mapper.UserMappers.mapUsersToShortProfiles;
 
 @Service
 @RequiredArgsConstructor
@@ -64,7 +70,7 @@ public class FriendshipService {
         return new SimpleDtoResponse(FRIENDSHIP_DELETED);
     }
 
-    public Friendship findFriendship(long id, long friendId) {
+    private Friendship findFriendship(long id, long friendId) {
 
         if (id == friendId) {
             throw new BadRequestException(FRIEND_ID_MATCH_USER_ID);
@@ -78,5 +84,28 @@ public class FriendshipService {
 
         return friendshipRepository.findFriendshipByUserAndFriend(friend, user)
                 .orElseThrow(() -> new FriendshipNotFoundException(FRIENDSHIP_NOT_FOUND));
+    }
+
+    public FriendListDtoResponse getFriends(long id) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_BY_ID));
+
+        List<User> friends = Stream.of(user.getInvitationsToUser(), user.getInvitedByUser())
+                .flatMap(friendships -> friendships.stream()
+                        .filter((friendship) -> friendship.getFriendshipStatus() == ACCEPTED)
+                        .map(friendship -> {
+                            if (friendship.getUser().getId() == id) {
+                                return friendship.getFriend();
+                            } else {
+                                return friendship.getUser();
+                            }
+                        }))
+                .toList();
+
+        return FriendListDtoResponse.builder()
+                .friends(mapUsersToShortProfiles(friends))
+                .count(friends.size())
+                .build();
     }
 }
