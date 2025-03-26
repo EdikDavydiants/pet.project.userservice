@@ -7,6 +7,7 @@ import pet.project.userservice.exception.FriendshipNotFoundException;
 import pet.project.userservice.exception.UserNotFoundException;
 import pet.project.userservice.model.dto.SimpleDtoResponse;
 import pet.project.userservice.model.dto.response.FriendListDtoResponse;
+import pet.project.userservice.model.dto.response.FriendsIdsDtoResponse;
 import pet.project.userservice.model.entity.Friendship;
 import pet.project.userservice.model.entity.User;
 import pet.project.userservice.repository.FriendshipRepository;
@@ -107,5 +108,11 @@ public class FriendshipService {
                 .friends(mapUsersToShortProfiles(friends))
                 .count(friends.size())
                 .build();
+    }
+
+    public FriendsIdsDtoResponse getFriendIds(long userId) {
+
+        List<Long> friendsIds = friendshipRepository.findFriendIds(userId);
+        return new FriendsIdsDtoResponse(friendsIds);
     }
 }

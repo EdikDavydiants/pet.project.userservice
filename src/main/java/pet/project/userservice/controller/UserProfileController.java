@@ -7,9 +7,10 @@ import pet.project.userservice.model.dto.request.UserProfileUpdateDtoRequest;
 import pet.project.userservice.model.dto.response.UserProfileDtoResponse;
 import pet.project.userservice.model.dto.response.UserShortProfileDtoResponse;
 import pet.project.userservice.service.UserProfileService;
-import pet.project.userservice.utils.JwtUtils;
 
 import java.util.List;
+
+import static pet.project.userservice.utils.JwtUtils.extractTokenFromHeader;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class UserProfileController {
     public UserProfileDtoResponse getUserProfile(
             @RequestHeader(value = "Authorization") String authHeader, @PathVariable long id) {
 
-        String jwt = JwtUtils.extractTokenFromHeader(authHeader);
+        String jwt = extractTokenFromHeader(authHeader);
         return userProfileService.getUserProfile(jwt, id);
     }
 
@@ -30,7 +31,7 @@ public class UserProfileController {
             @RequestHeader(value = "Authorization") String authHeader, @PathVariable long id,
             @Valid @RequestBody UserProfileUpdateDtoRequest request) {
 
-        String jwt = JwtUtils.extractTokenFromHeader(authHeader);
+        String jwt = extractTokenFromHeader(authHeader);
         userProfileService.updateUserProfile(jwt, id, request);
     }
 

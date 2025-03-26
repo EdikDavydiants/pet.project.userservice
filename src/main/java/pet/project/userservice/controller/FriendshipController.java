@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pet.project.userservice.exception.ForbiddenAccessException;
 import pet.project.userservice.model.dto.SimpleDtoResponse;
 import pet.project.userservice.model.dto.response.FriendListDtoResponse;
+import pet.project.userservice.model.dto.response.FriendsIdsDtoResponse;
 import pet.project.userservice.service.FriendshipService;
 
 import static pet.project.userservice.constant.ErrorMessagesUtil.FORBIDDEN_REQUEST;
@@ -62,5 +63,11 @@ public class FriendshipController {
         if(headerId != id) {
             throw new ForbiddenAccessException(FORBIDDEN_REQUEST);
         }
+    }
+
+    @GetMapping("/{userId}/friendsIds")
+    public FriendsIdsDtoResponse getFriendIds(@PathVariable long userId) {
+
+        return friendshipService.getFriendIds(userId);
     }
 }
