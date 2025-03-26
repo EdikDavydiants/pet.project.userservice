@@ -3,9 +3,11 @@ package pet.project.userservice.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import pet.project.userservice.model.dto.request.LikingUserIdListDtoRequest;
 import pet.project.userservice.model.dto.request.UserProfileUpdateDtoRequest;
+import pet.project.userservice.model.dto.response.LikingUserProfileListDtoResponse;
 import pet.project.userservice.model.dto.response.UserProfileDtoResponse;
-import pet.project.userservice.model.dto.response.UserShortProfileDtoResponse;
+import pet.project.userservice.model.dto.UserShortProfileDto;
 import pet.project.userservice.service.UserProfileService;
 
 import java.util.List;
@@ -36,8 +38,14 @@ public class UserProfileController {
     }
 
     @GetMapping
-    public List<UserShortProfileDtoResponse> searchUserProfiles(@RequestParam String query) {
+    public List<UserShortProfileDto> searchUserProfiles(@RequestParam String query) {
 
         return userProfileService.searchUserProfiles(query);
+    }
+
+    @PostMapping("/profiles")
+    public LikingUserProfileListDtoResponse getUserProfiles(@RequestBody LikingUserIdListDtoRequest request) {
+
+        return userProfileService.getUserProfiles(request.userIds());
     }
 }

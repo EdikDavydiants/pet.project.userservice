@@ -1,11 +1,10 @@
 package pet.project.userservice.mapper;
 
 import pet.project.userservice.model.dto.response.UserProfileDtoResponse;
-import pet.project.userservice.model.dto.response.UserShortProfileDtoResponse;
+import pet.project.userservice.model.dto.UserShortProfileDto;
 import pet.project.userservice.model.entity.User;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UserMappers {
 
@@ -32,10 +31,10 @@ public class UserMappers {
                 .build();
     }
 
-    public static List<UserShortProfileDtoResponse> mapUsersToShortProfiles(List<User> users) {
+    public static List<UserShortProfileDto> mapUsersToShortProfiles(List<User> users) {
 
         return users.stream()
-                .map(user -> UserShortProfileDtoResponse.builder()
+                .map(user -> UserShortProfileDto.builder()
                         .id(user.getId())
                         .name(user.getName())
                         .bio(user.getBio())

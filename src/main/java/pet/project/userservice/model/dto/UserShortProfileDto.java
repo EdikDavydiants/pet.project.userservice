@@ -1,9 +1,9 @@
-package pet.project.userservice.model.dto.response;
+package pet.project.userservice.model.dto;
 
 import lombok.Builder;
 
 @Builder
-public record UserShortProfileDtoResponse(
+public record UserShortProfileDto(
 
         long id,
 

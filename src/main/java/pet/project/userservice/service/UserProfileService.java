@@ -1,13 +1,15 @@
 package pet.project.userservice.service;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pet.project.userservice.exception.AllParamsAreNullException;
 import pet.project.userservice.exception.ForbiddenAccessException;
 import pet.project.userservice.exception.UserNotFoundException;
 import pet.project.userservice.model.dto.request.UserProfileUpdateDtoRequest;
+import pet.project.userservice.model.dto.response.LikingUserProfileListDtoResponse;
 import pet.project.userservice.model.dto.response.UserProfileDtoResponse;
-import pet.project.userservice.model.dto.response.UserShortProfileDtoResponse;
+import pet.project.userservice.model.dto.UserShortProfileDto;
 import pet.project.userservice.model.entity.User;
 import pet.project.userservice.repository.UserRepository;
 import pet.project.userservice.utils.JwtUtils;
@@ -65,9 +67,16 @@ public class UserProfileService {
         userRepository.save(user);
     }
 
-    public List<UserShortProfileDtoResponse> searchUserProfiles(String query) {
+    public List<UserShortProfileDto> searchUserProfiles(String query) {
 
         List<User> users = userRepository.findTop15ByNameContainingIgnoreCase(query);
         return mapUsersToShortProfiles(users);
+    }
+
+    public LikingUserProfileListDtoResponse getUserProfiles(@NotNull List<Long> usersIds) {
+
+        var userList = userRepository.findAllById(usersIds);
+        var userDtoList = mapUsersToShortProfiles(userList);
+        return new LikingUserProfileListDtoResponse(userDtoList);
     }
 }
